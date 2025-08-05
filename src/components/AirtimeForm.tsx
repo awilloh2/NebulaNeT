@@ -6,6 +6,7 @@ import PhoneNumberValidator from './PhoneNumberValidator';
 import { Transaction } from '../types';
 import { airtimeTiers } from '../data/tiers';
 import { useTransactions } from '../hooks/useTransactions';
+import { useStore } from '../store/useStore';
 
 interface AirtimeFormProps {
   onTransaction?: (transaction: Omit<Transaction, 'id' | 'timestamp'>) => void;
@@ -21,6 +22,7 @@ const AirtimeForm: React.FC<AirtimeFormProps> = ({ onTransaction }) => {
   const [phoneCarrier, setPhoneCarrier] = useState('');
   
   const { purchaseAirtime, isPurchasingAirtime } = useTransactions();
+  const { updateTotalSavings } = useStore();
 
   const calculateDiscountedAmount = () => {
     const baseAmount = parseFloat(amount) || 0;
@@ -32,12 +34,25 @@ const AirtimeForm: React.FC<AirtimeFormProps> = ({ onTransaction }) => {
     e.preventDefault();
     if (!selectedNetwork || !phoneNumber || !amount || !isPhoneValid) return;
 
+    // Add haptic feedback for mobile devices
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+
+    // Calculate savings for user feedback
+    const originalAmount = parseFloat(amount);
+    const discountedAmount = calculateDiscountedAmount();
+    const savings = originalAmount - discountedAmount;
+
     purchaseAirtime({
       network: selectedNetwork,
       phoneNumber,
-      amount: calculateDiscountedAmount(),
+      amount: discountedAmount,
       tier: selectedTier.name,
     });
+
+    // Update total savings in store
+    updateTotalSavings(savings);
 
     setShowSuccess(true);
     setPhoneNumber('');
@@ -147,7 +162,7 @@ const AirtimeForm: React.FC<AirtimeFormProps> = ({ onTransaction }) => {
         <button
           type="submit"
           disabled={isPurchasingAirtime || !selectedNetwork || !phoneNumber || !amount || !isPhoneValid}
-          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center space-x-2"
+          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none transition-all duration-200 flex items-center justify-center space-x-2 active:scale-[0.98]"
         >
           {isPurchasingAirtime ? (
             <>
@@ -157,7 +172,7 @@ const AirtimeForm: React.FC<AirtimeFormProps> = ({ onTransaction }) => {
           ) : (
             <>
               <CreditCard className="w-5 h-5" />
-              <span>Buy Airtime</span>
+              <span>Buy Airtime - ₦{amount ? calculateDiscountedAmount().toFixed(2) : '0.00'}</span>
             </>
           )}
         </button>

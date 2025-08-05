@@ -36,10 +36,10 @@ export const useTransactions = () => {
       addTransaction(transaction);
       
       if (response.status === 'success') {
-        toast.success(`Airtime purchase successful! ₦${variables.amount} sent to ${variables.phoneNumber}`);
+        toast.success(`Airtime purchase successful! ₦${variables.amount.toFixed(2)} sent to ${variables.phoneNumber}`);
         addNotification({
           type: 'success',
-          message: `₦${variables.amount} airtime sent to ${variables.phoneNumber}`,
+          message: `₦${variables.amount.toFixed(2)} airtime sent to ${variables.phoneNumber}`,
         });
       } else {
         toast.info('Transaction is being processed...');
@@ -75,10 +75,10 @@ export const useTransactions = () => {
       addTransaction(transaction);
       
       if (response.status === 'success') {
-        toast.success(`Data bundle activated! Sent to ${variables.phoneNumber}`);
+        toast.success(`${variables.bundleId.toUpperCase()} data bundle activated! Sent to ${variables.phoneNumber}`);
         addNotification({
           type: 'success',
-          message: `Data bundle activated for ${variables.phoneNumber}`,
+          message: `${variables.bundleId.toUpperCase()} data bundle activated for ${variables.phoneNumber}`,
         });
       } else {
         toast.info('Transaction is being processed...');

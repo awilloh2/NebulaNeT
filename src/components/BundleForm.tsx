@@ -6,6 +6,7 @@ import PhoneNumberValidator from './PhoneNumberValidator';
 import { Transaction } from '../types';
 import { bundleOptions } from '../data/bundles';
 import { useTransactions } from '../hooks/useTransactions';
+import { useStore } from '../store/useStore';
 
 interface BundleFormProps {
   onTransaction?: (transaction: Omit<Transaction, 'id' | 'timestamp'>) => void;
@@ -20,16 +21,28 @@ const BundleForm: React.FC<BundleFormProps> = ({ onTransaction }) => {
   const [phoneCarrier, setPhoneCarrier] = useState('');
   
   const { purchaseBundle, isPurchasingBundle } = useTransactions();
+  const { updateTotalSavings } = useStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedNetwork || !phoneNumber || !isPhoneValid) return;
+
+    // Add haptic feedback for mobile devices
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+
+    // Calculate savings for user feedback
+    const savings = selectedBundle.originalPrice - selectedBundle.discountedPrice;
 
     purchaseBundle({
       network: selectedNetwork,
       phoneNumber,
       bundleId: selectedBundle.id,
     });
+
+    // Update total savings in store
+    updateTotalSavings(savings);
 
     setShowSuccess(true);
     setPhoneNumber('');
@@ -123,7 +136,7 @@ const BundleForm: React.FC<BundleFormProps> = ({ onTransaction }) => {
         <button
           type="submit"
           disabled={isPurchasingBundle || !selectedNetwork || !phoneNumber || !isPhoneValid}
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center space-x-2"
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none transition-all duration-200 flex items-center justify-center space-x-2 active:scale-[0.98]"
         >
           {isPurchasingBundle ? (
             <>
@@ -133,7 +146,7 @@ const BundleForm: React.FC<BundleFormProps> = ({ onTransaction }) => {
           ) : (
             <>
               <CreditCard className="w-5 h-5" />
-              <span>Buy Data Bundle</span>
+              <span>Buy {selectedBundle.size} - ₦{selectedBundle.discountedPrice}</span>
             </>
           )}
         </button>
