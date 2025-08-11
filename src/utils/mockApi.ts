@@ -9,10 +9,11 @@ export const mockApiService = {
   purchaseAirtime: async (data: AirtimePurchaseRequest): Promise<TransactionResponse> => {
     await delay(1500); // Simulate network delay
     
+    // 🎯 ALWAYS SUCCESSFUL - NO RANDOM FAILURES
     return {
       id: generateTransactionId(),
       reference: `AIR${Date.now()}`,
-      status: 'success', // Always successful
+      status: 'success', // ✅ Always returns 'success'
       message: 'Airtime purchase successful',
       amount: data.amount,
       recipient: data.phoneNumber,
@@ -32,10 +33,11 @@ export const mockApiService = {
       '50gb': 18000,
     };
     
+    // 🎯 ALWAYS SUCCESSFUL - NO RANDOM FAILURES
     return {
       id: generateTransactionId(),
       reference: `BUN${Date.now()}`,
-      status: 'success', // Always successful
+      status: 'success', // ✅ Always returns 'success'
       message: 'Data bundle purchase successful',
       amount: bundlePrices[data.bundleId] || 1000,
       recipient: data.phoneNumber,
