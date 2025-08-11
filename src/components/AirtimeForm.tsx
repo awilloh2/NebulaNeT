@@ -162,12 +162,36 @@ const AirtimeForm: React.FC<AirtimeFormProps> = ({ onTransaction }) => {
         <button
           type="submit"
           disabled={isPurchasingAirtime || !selectedNetwork || !phoneNumber || !amount || !isPhoneValid}
-          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none transition-all duration-200 flex items-center justify-center space-x-2 active:scale-[0.98]"
+          className={`w-full py-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center space-x-2 ${
+            isPurchasingAirtime || !selectedNetwork || !phoneNumber || !amount || !isPhoneValid
+              ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-75'
+              : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]'
+          }`}
         >
           {isPurchasingAirtime ? (
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               <span>Processing...</span>
+            </>
+          ) : !selectedNetwork ? (
+            <>
+              <CreditCard className="w-5 h-5" />
+              <span>Select Network Provider First</span>
+            </>
+          ) : !phoneNumber ? (
+            <>
+              <CreditCard className="w-5 h-5" />
+              <span>Enter Phone Number</span>
+            </>
+          ) : !isPhoneValid ? (
+            <>
+              <CreditCard className="w-5 h-5" />
+              <span>Invalid Phone Number</span>
+            </>
+          ) : !amount ? (
+            <>
+              <CreditCard className="w-5 h-5" />
+              <span>Enter Amount</span>
             </>
           ) : (
             <>
@@ -176,6 +200,19 @@ const AirtimeForm: React.FC<AirtimeFormProps> = ({ onTransaction }) => {
             </>
           )}
         </button>
+        
+        {/* Helper text for better UX */}
+        {(!selectedNetwork || !phoneNumber || !amount || !isPhoneValid) && (
+          <div className="mt-2 text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p className="font-medium text-blue-800 mb-1">Complete these steps to purchase:</p>
+            <ul className="space-y-1 text-blue-700">
+              {!selectedNetwork && <li>• Select a network provider (MTN, Airtel, Glo, or 9mobile)</li>}
+              {!phoneNumber && <li>• Enter your phone number</li>}
+              {phoneNumber && !isPhoneValid && <li>• Enter a valid phone number</li>}
+              {!amount && <li>• Enter the amount you want to purchase</li>}
+            </ul>
+          </div>
+        )}
       </form>
     </div>
   );
