@@ -9,17 +9,10 @@ export const mockApiService = {
   purchaseAirtime: async (data: AirtimePurchaseRequest): Promise<TransactionResponse> => {
     await delay(1500); // Simulate network delay
     
-    // Simulate occasional failures for testing
-    const shouldFail = Math.random() < 0.1; // 10% failure rate
-    
-    if (shouldFail) {
-      throw new Error('Network error: Unable to process transaction');
-    }
-    
     return {
       id: generateTransactionId(),
       reference: `AIR${Date.now()}`,
-      status: Math.random() < 0.9 ? 'success' : 'pending', // 90% success rate
+      status: 'success', // Always successful
       message: 'Airtime purchase successful',
       amount: data.amount,
       recipient: data.phoneNumber,
@@ -28,13 +21,6 @@ export const mockApiService = {
 
   purchaseBundle: async (data: BundlePurchaseRequest): Promise<TransactionResponse> => {
     await delay(2000); // Simulate network delay
-    
-    // Simulate occasional failures for testing
-    const shouldFail = Math.random() < 0.1; // 10% failure rate
-    
-    if (shouldFail) {
-      throw new Error('Network error: Unable to process transaction');
-    }
     
     // Mock bundle prices
     const bundlePrices: Record<string, number> = {
@@ -49,7 +35,7 @@ export const mockApiService = {
     return {
       id: generateTransactionId(),
       reference: `BUN${Date.now()}`,
-      status: Math.random() < 0.9 ? 'success' : 'pending', // 90% success rate
+      status: 'success', // Always successful
       message: 'Data bundle purchase successful',
       amount: bundlePrices[data.bundleId] || 1000,
       recipient: data.phoneNumber,
