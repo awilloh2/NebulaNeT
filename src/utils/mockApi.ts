@@ -52,6 +52,7 @@ export const mockApiService = {
       { network: 'Airtel', balance: 8750.25, status: 'active' as const },
       { network: 'Glo', balance: 12300.75, status: 'active' as const },
       { network: '9mobile', balance: 5680.00, status: 'active' as const },
+      { network: 'Safaricom', balance: 9850.30, status: 'active' as const },
     ];
   },
 
@@ -64,6 +65,7 @@ export const mockApiService = {
       'airtel': ['0802', '0808', '0812', '0901', '0902', '0907', '0912'],
       'glo': ['0805', '0807', '0815', '0811', '0905', '0915'],
       '9mobile': ['0809', '0817', '0818', '0908', '0909'],
+      'safaricom': ['0701', '0702', '0703', '0704', '0705', '0706', '0707', '0708', '0709'],
     };
     
     const phonePrefix = phoneNumber.substring(0, 4);
