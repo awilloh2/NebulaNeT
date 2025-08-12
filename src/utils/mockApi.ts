@@ -61,11 +61,11 @@ export const mockApiService = {
     
     // Simple phone number validation logic
     const prefixes: Record<string, string[]> = {
-      'mtn': ['0803', '0806', '0813', '0816', '0903', '0906', '0913', '0916'],
-      'airtel': ['0802', '0808', '0812', '0901', '0902', '0907', '0912'],
-      'glo': ['0805', '0807', '0815', '0811', '0905', '0915'],
+      'MTN': ['0803', '0806', '0813', '0816', '0903', '0906', '0913', '0916'],
+      'Airtel': ['0802', '0808', '0812', '0901', '0902', '0907', '0912'],
+      'Glo': ['0805', '0807', '0815', '0811', '0905', '0915'],
       '9mobile': ['0809', '0817', '0818', '0908', '0909'],
-      'safaricom': ['0701', '0702', '0703', '0704', '0705', '0706', '0707', '0708', '0709'],
+      'Safaricom': ['0701', '0702', '0703', '0704', '0705', '0706', '0707', '0708', '0709'],
     };
     
     const phonePrefix = phoneNumber.substring(0, 4);
@@ -80,7 +80,7 @@ export const mockApiService = {
     
     return {
       valid: phoneNumber.length === 11 && /^0\d{10}$/.test(phoneNumber) && actualCarrier !== '',
-      carrier: actualCarrier.toUpperCase(),
+      carrier: actualCarrier,
     };
   },
 
