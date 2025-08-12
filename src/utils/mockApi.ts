@@ -59,28 +59,43 @@ export const mockApiService = {
   verifyPhoneNumber: async (phoneNumber: string, network: string) => {
     await delay(800);
     
-    // Simple phone number validation logic
+    // Simple phone number validation logic - normalize network names
     const prefixes: Record<string, string[]> = {
-      'MTN': ['0803', '0806', '0813', '0816', '0903', '0906', '0913', '0916'],
-      'Airtel': ['0802', '0808', '0812', '0901', '0902', '0907', '0912'],
-      'Glo': ['0805', '0807', '0815', '0811', '0905', '0915'],
+      'mtn': ['0803', '0806', '0813', '0816', '0903', '0906', '0913', '0916'],
+      'airtel': ['0802', '0808', '0812', '0901', '0902', '0907', '0912'],
+      'glo': ['0805', '0807', '0815', '0811', '0905', '0915'],
       '9mobile': ['0809', '0817', '0818', '0908', '0909'],
-      'Safaricom': ['0701', '0702', '0703', '0704', '0705', '0706', '0707', '0708', '0709'],
+      'safaricom': ['0710', '0711', '0712', '0713', '0714', '0715', '0716', '0717', '0718', '0719', '0720', '0721', '0722', '0723', '0724', '0725', '0726', '0727', '0728', '0729'],
     };
     
     const phonePrefix = phoneNumber.substring(0, 4);
+    const normalizedNetwork = network.toLowerCase();
     let actualCarrier = '';
+    let actualCarrierDisplay = '';
     
-    for (const [carrier, carrierPrefixes] of Object.entries(prefixes)) {
+    // Map network IDs to display names
+    const networkDisplayNames: Record<string, string> = {
+      'mtn': 'MTN',
+      'airtel': 'Airtel', 
+      'glo': 'Glo',
+      '9mobile': '9mobile',
+      'safaricom': 'Safaricom'
+    };
+    
+    for (const [carrierKey, carrierPrefixes] of Object.entries(prefixes)) {
       if (carrierPrefixes.includes(phonePrefix)) {
-        actualCarrier = carrier;
+        actualCarrier = carrierKey;
+        actualCarrierDisplay = networkDisplayNames[carrierKey] || carrierKey;
         break;
       }
     }
     
+    // Check if the detected carrier matches the selected network
+    const isValidNetwork = actualCarrier === normalizedNetwork;
+    
     return {
-      valid: phoneNumber.length === 11 && /^0\d{10}$/.test(phoneNumber) && actualCarrier !== '',
-      carrier: actualCarrier,
+      valid: phoneNumber.length === 11 && /^0\d{10}$/.test(phoneNumber) && actualCarrier !== '' && isValidNetwork,
+      carrier: actualCarrierDisplay,
     };
   },
 
