@@ -15,6 +15,8 @@ export interface NetworkProvider {
   name: string;
   logo: string;
   color: string;
+  country: string;
+  countryCode: string;
 }
 
 export interface AirtimeTier {

@@ -32,8 +32,11 @@ function App() {
             <h1 className="text-4xl font-bold text-gray-800 mb-2">
               Welcome to <span className="text-purple-600">NebulaNeT</span>
             </h1>
-            <p className="text-gray-600 text-lg">
-              Purchase airtime and data bundles at unbeatable prices
+            <p className="text-gray-600 text-lg mb-2">
+              Purchase airtime and data bundles across Africa at unbeatable prices
+            </p>
+            <p className="text-gray-500 text-sm">
+              🌍 Serving Nigeria • Kenya • Uganda • Tanzania • Sudan • Morocco • Ethiopia
             </p>
             {totalSavings > 0 && (
               <div className="mt-4 inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full">
