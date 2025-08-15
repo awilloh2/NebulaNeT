@@ -110,7 +110,7 @@ const AirtimeForm: React.FC<AirtimeFormProps> = ({ onTransaction }) => {
           />
           {phoneCarrier && phoneCarrier !== selectedNetwork && (
             <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-sm text-yellow-700">
-              Warning: Phone number belongs to {phoneCarrier}, but {selectedNetwork.charAt(0).toUpperCase() + selectedNetwork.slice(1)} is selected
+              Info: Phone number belongs to {phoneCarrier}. Cross-network purchases are supported.
             </div>
           )}
         </div>

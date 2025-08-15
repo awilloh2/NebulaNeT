@@ -67,7 +67,7 @@ const PhoneNumberValidator: React.FC<PhoneNumberValidatorProps> = ({
           <span className="text-sm">
             {validationResult.valid
               ? `Valid ${validationResult.carrier} number`
-              : 'Invalid phone number or network mismatch'
+              : 'Invalid phone number format'
             }
           </span>
         </div>

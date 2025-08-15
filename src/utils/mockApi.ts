@@ -65,7 +65,7 @@ export const mockApiService = {
       'airtel': ['0802', '0808', '0812', '0901', '0902', '0907', '0912'],
       'glo': ['0805', '0807', '0815', '0811', '0905', '0915'],
       '9mobile': ['0809', '0817', '0818', '0908', '0909'],
-      'safaricom': ['0710', '0711', '0712', '0713', '0714', '0715', '0716', '0717', '0718', '0719', '0720', '0721', '0722', '0723', '0724', '0725', '0726', '0727', '0728', '0729'],
+      'safaricom': ['0710', '0711', '0712', '0713', '0714', '0715', '0716', '0717', '0718', '0719', '0720', '0721', '0722', '0723', '0724', '0725', '0726', '0727', '0728', '0729', '0701', '0702', '0703', '0704', '0705', '0706', '0707', '0708', '0709'],
     };
     
     const phonePrefix = phoneNumber.substring(0, 4);
@@ -90,11 +90,12 @@ export const mockApiService = {
       }
     }
     
-    // Check if the detected carrier matches the selected network
-    const isValidNetwork = actualCarrier === normalizedNetwork;
+    // Allow cross-network purchases but validate phone number format
+    const isValidFormat = phoneNumber.length === 11 && /^0\d{10}$/.test(phoneNumber);
+    const hasValidCarrier = actualCarrier !== '';
     
     return {
-      valid: phoneNumber.length === 11 && /^0\d{10}$/.test(phoneNumber) && actualCarrier !== '' && isValidNetwork,
+      valid: isValidFormat && hasValidCarrier,
       carrier: actualCarrierDisplay,
     };
   },
