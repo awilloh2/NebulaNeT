@@ -23,7 +23,10 @@ const PhoneNumberValidator: React.FC<PhoneNumberValidatorProps> = ({
 
   useEffect(() => {
     const validatePhone = async () => {
-      if (!phoneNumber || phoneNumber.length < 11 || !selectedNetwork) {
+      // Clean phone number for length check
+      const cleanPhone = phoneNumber.replace(/[\s\-\(\)]/g, '');
+      
+      if (!phoneNumber || cleanPhone.length < 11 || !selectedNetwork) {
         setValidationResult(null);
         onValidationChange(false);
         return;
@@ -46,7 +49,9 @@ const PhoneNumberValidator: React.FC<PhoneNumberValidatorProps> = ({
     return () => clearTimeout(debounceTimer);
   }, [phoneNumber, selectedNetwork, verifyPhoneNumber, onValidationChange]);
 
-  if (!phoneNumber || phoneNumber.length < 11) return null;
+  // Clean phone number for display check
+  const cleanPhone = phoneNumber.replace(/[\s\-\(\)]/g, '');
+  if (!phoneNumber || cleanPhone.length < 11) return null;
 
   return (
     <div className="mt-2">

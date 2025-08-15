@@ -71,6 +71,9 @@ export const mockApiService = {
   verifyPhoneNumber: async (phoneNumber: string, network: string) => {
     await delay(800);
     
+    // Clean phone number - remove spaces, dashes, and other formatting
+    const cleanPhone = phoneNumber.replace(/[\s\-\(\)]/g, '');
+    
     // International phone number validation logic
     const prefixes: Record<string, string[]> = {
       // Nigeria
@@ -111,7 +114,8 @@ export const mockApiService = {
       'safaricom-et': ['0960', '0961', '0962', '0963', '0964', '0965'],
     };
     
-    const phonePrefix = phoneNumber.substring(0, 4);
+    // Use cleaned phone number for validation
+    const phonePrefix = cleanPhone.substring(0, 4);
     let actualCarrier = '';
     let actualCarrierDisplay = '';
     
@@ -164,7 +168,8 @@ export const mockApiService = {
     }
     
     // Allow cross-network purchases but validate phone number format
-    const isValidFormat = phoneNumber.length === 11 && /^0\d{10}$/.test(phoneNumber);
+    // Accept various formats: 0710-2156-15, 0710 2156 15, 07102156150, etc.
+    const isValidFormat = cleanPhone.length === 11 && /^0\d{10}$/.test(cleanPhone);
     const hasValidCarrier = actualCarrier !== '';
     
     return {
